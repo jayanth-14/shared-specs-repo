@@ -1,2 +1,9 @@
-# Placeholder ruleset. Replace with real rules later.
-rules: {}
+extends: spectral:oas
+
+rules:
+  path-keys-no-trailing-slash: error
+  oas3-valid-media-example: warn
+  oas3-schema: warn
+  oas3-valid-schema-example: off
+  no-$ref-siblings: warn
+
