@@ -10,7 +10,8 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,14 +29,18 @@ jobs:
         if: steps.changed.outputs.files != ''
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "20.20.2"
+
+      - name: Install Spectral
+        if: steps.changed.outputs.files != ''
+        run: |
+          npm install @stoplight/spectral-cli@6.15.1
 
       - name: Spectral lint
         if: steps.changed.outputs.files != ''
         run: |
-          npm install -g @stoplight/spectral-cli@6.15.1
           echo "${{ steps.changed.outputs.files }}" | while read -r f; do
-            [ -n "$f" ] && spectral lint "$f" --ruleset .spectral.yaml
+            [ -n "$f" ] && npx spectral lint "$f" --ruleset .spectral.yaml
           done
 
       - name: Set up Java
@@ -52,14 +57,21 @@ jobs:
       - name: Specmatic backward-compatibility check
         if: steps.changed.outputs.files != ''
         run: |
-          java -Djava.awt.headless=true -jar "$HOME/.specmatic/specmatic.jar" \
-            backward-compatibility-check --base-branch "origin/${{ github.base_ref }}" --target-path specs/OpenApi
+          java -Djava.awt.headless=true \
+            -jar "$HOME/.specmatic/specmatic.jar" \
+            backward-compatibility-check \
+            --base-branch "origin/${{ github.base_ref }}" \
+            --target-path specs/OpenApi
 
   auto-merge:
     needs: validate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+
     steps:
       - name: Merge PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge "${{ github.event.pull_request.number }}" --squash --repo "${{ github.repository }}"
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" \
+            --squash \
+            --repo "${{ github.repository }}"
