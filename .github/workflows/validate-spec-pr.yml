@@ -28,12 +28,12 @@ jobs:
         if: steps.changed.outputs.files != ''
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Spectral lint
         if: steps.changed.outputs.files != ''
         run: |
-          npm install -g @stoplight/spectral-cli
+          npm install -g @stoplight/spectral-cli@6.15.1
           echo "${{ steps.changed.outputs.files }}" | while read -r f; do
             [ -n "$f" ] && spectral lint "$f" --ruleset .spectral.yaml
           done
@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Install Specmatic
         if: steps.changed.outputs.files != ''
