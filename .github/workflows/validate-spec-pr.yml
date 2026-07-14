@@ -1,65 +1,45 @@
-name: Validate incoming spec PR
+name: Pull Request Merge Checks
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    branches: [main]
-
-permissions:
-  contents: write
-  pull-requests: write
+    branches:
+      - main
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
+    name: Check API Contracts
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Detect changed spec files
-        id: changed
-        run: |
-          FILES=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- 'specs/OpenApi/**/*.json')
-          echo "files<<SPEC_EOF" >> "$GITHUB_OUTPUT"
-          echo "$FILES" >> "$GITHUB_OUTPUT"
-          echo "SPEC_EOF" >> "$GITHUB_OUTPUT"
-
-      - name: Set up Node
-        if: steps.changed.outputs.files != ''
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Spectral lint
-        if: steps.changed.outputs.files != ''
-        run: |
-          npm install -g @stoplight/spectral-cli
-          echo "${{ steps.changed.outputs.files }}" | while read -r f; do
-            [ -n "$f" ] && spectral lint "$f" --ruleset .spectral.yaml
-          done
-
-      - name: Set up Java
-        if: steps.changed.outputs.files != ''
-        uses: actions/setup-java@v4
+      - name: Get changed OpenAPI files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v34
         with:
-          distribution: temurin
-          java-version: "17"
+          files: |
+            specs/**/*.yaml
+            specs/**/*.yml
+            specs/**/*.json
 
-      - name: Install Specmatic
-        if: steps.changed.outputs.files != ''
-        run: curl https://docs.specmatic.io/install-specmatic.sh | bash
-
-      - name: Specmatic backward-compatibility check
-        if: steps.changed.outputs.files != ''
+      - name: Run Spectral linter on changed files
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
-          java -Djava.awt.headless=true -jar "$HOME/.specmatic/specmatic.jar" \
-            backward-compatibility-check --base-branch "origin/${{ github.base_ref }}" --target-path specs/OpenApi
+          echo "Running Spectral linter on: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+          FILES=$(find specs -type f \( -name "*.yaml" -o -name "*.yml" -o -name "*.json" \))
+          docker run --rm -v "$(pwd):/repo:rw" -w /repo stoplight/spectral:6.15.1 lint $FILES
 
-  auto-merge:
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Merge PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge "${{ github.event.pull_request.number }}" --squash --repo "${{ github.repository }}"
+      - name: Run OpenAPI backward compatibility check
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          docker run -v "$(pwd):/repo:rw" -w /repo \
+            --user $(id -u):$(id -g) \
+            specmatic/specmatic backward-compatibility-check --repo-dir=/repo --base-branch=origin/main
