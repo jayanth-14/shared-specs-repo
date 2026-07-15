@@ -1,0 +1,1958 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Product Core API Contract (v1)",
+    "description": "External-facing API contract for product-core service",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8282/product-core",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Rights Profile Templates",
+      "description": "Governance-authored reusable rights configurations"
+    },
+    {
+      "name": "Product Offerings",
+      "description": "Manage product offerings and their slices"
+    }
+  ],
+  "paths": {
+    "/api/v1/rights-profile/templates/{id}": {
+      "get": {
+        "tags": [
+          "Rights Profile Templates"
+        ],
+        "summary": "Get a Rights Profile Template by ID",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Template detail",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "template-detail": {
+                    "description": "template-detail",
+                    "value": {
+                      "templateId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "templateCode": "RPT-PERP-001",
+                      "name": "Perpetual Access — Full Rights",
+                      "description": "Standard perpetual access with full online and download rights",
+                      "appliesTo": [
+                        "BOOKS",
+                        "ARTICLES"
+                      ],
+                      "rightsConfig": {
+                        "access": {
+                          "accessType": {
+                            "value": "PERPETUAL",
+                            "editable": false
+                          }
+                        },
+                        "timeWindow": {
+                          "gracePeriod": {
+                            "value": "NA",
+                            "editable": false
+                          }
+                        },
+                        "usageRights": {
+                          "onlineAccess": {
+                            "value": "ALLOWED",
+                            "editable": false
+                          },
+                          "download": {
+                            "value": "ALLOWED",
+                            "editable": false
+                          },
+                          "print": {
+                            "value": "ALLOWED",
+                            "editable": true
+                          },
+                          "copyPaste": {
+                            "value": "ALLOWED",
+                            "editable": true
+                          },
+                          "saveOffline": {
+                            "value": "ALLOWED",
+                            "editable": false
+                          },
+                          "share": {
+                            "value": "ALLOWED",
+                            "editable": true
+                          }
+                        },
+                        "concurrency": {
+                          "concurrencyMode": {
+                            "value": "NOT_APPLICABLE",
+                            "editable": false
+                          }
+                        },
+                        "apiFeed": {
+                          "apiFeed": {
+                            "value": "OFF",
+                            "editable": false
+                          }
+                        },
+                        "aiRights": {
+                          "aiRights": {
+                            "value": "OFF",
+                            "editable": false
+                          }
+                        },
+                        "nonAiRights": {
+                          "nonAiRights": {
+                            "value": "OFF",
+                            "editable": false
+                          }
+                        }
+                      },
+                      "status": "Active",
+                      "version": 1,
+                      "schemaVersion": 1,
+                      "createdAt": "2026-04-30T09:00:00Z",
+                      "updatedAt": "2026-04-30T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Rights Profile Templates"
+        ],
+        "summary": "Update a Rights Profile Template",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRightsTemplateRequest"
+              },
+              "examples": {
+                "update-template": {
+                  "summary": "Update all editable fields",
+                  "description": "update-template",
+                  "value": {
+                    "name": "Perpetual Access — Full Rights (Updated)",
+                    "description": "Updated standard perpetual access with full online and download rights",
+                    "appliesTo": [
+                      "BOOKS",
+                      "ARTICLES"
+                    ],
+                    "rightsConfig": {
+                      "access": {
+                        "accessType": {
+                          "value": "PERPETUAL",
+                          "editable": false
+                        }
+                      },
+                      "timeWindow": {
+                        "gracePeriod": {
+                          "value": "NA",
+                          "editable": false
+                        }
+                      },
+                      "usageRights": {
+                        "onlineAccess": {
+                          "value": "ALLOWED",
+                          "editable": false
+                        },
+                        "download": {
+                          "value": "ALLOWED",
+                          "editable": false
+                        },
+                        "print": {
+                          "value": "NOT_ALLOWED",
+                          "editable": true
+                        },
+                        "copyPaste": {
+                          "value": "ALLOWED",
+                          "editable": true
+                        },
+                        "saveOffline": {
+                          "value": "ALLOWED",
+                          "editable": false
+                        },
+                        "share": {
+                          "value": "ALLOWED",
+                          "editable": true
+                        }
+                      },
+                      "concurrency": {
+                        "concurrencyMode": {
+                          "value": "NOT_APPLICABLE",
+                          "editable": false
+                        }
+                      },
+                      "apiFeed": {
+                        "apiFeed": {
+                          "value": "OFF",
+                          "editable": false
+                        }
+                      },
+                      "aiRights": {
+                        "aiRights": {
+                          "value": "OFF",
+                          "editable": false
+                        }
+                      },
+                      "nonAiRights": {
+                        "nonAiRights": {
+                          "value": "OFF",
+                          "editable": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "validation-error": {
+                    "description": "validation-error",
+                    "value": {
+                      "status": 400,
+                      "code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "timestamp": "2026-04-30T09:00:00Z",
+                      "fieldErrors": {
+                        "name": "must not be blank",
+                        "appliesTo": "must not be empty"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Name conflict or template inactive",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "name-conflict": {
+                    "description": "name-conflict",
+                    "value": {
+                      "status": 409,
+                      "code": "TEMPLATE_NAME_CONFLICT",
+                      "message": "A template with name 'Perpetual Access — Full Rights' already exists",
+                      "timestamp": "2026-04-30T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Template updated",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "template-updated": {
+                    "description": "template-updated",
+                    "value": {
+                      "message": "Template with id 3fa85f64-5717-4562-b3fc-2c963f66afa6 updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rights-profile/templates": {
+      "get": {
+        "tags": [
+          "Rights Profile Templates"
+        ],
+        "summary": "List Rights Profile Templates",
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Draft",
+                "Active",
+                "Inactive"
+              ]
+            }
+          },
+          {
+            "name": "appliesTo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ALL",
+                "ARTICLES",
+                "BOOKS",
+                "JOURNALS"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Zero-based page index (0..N)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The size of the page to be returned",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 500,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid status or appliesTo value",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Paginated list of templates",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "template-list": {
+                    "description": "template-list",
+                    "value": {
+                      "totalCount": 1,
+                      "page": 0,
+                      "pageSize": 20,
+                      "data": [
+                        {
+                          "templateId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "templateCode": "RPT-PERP-001",
+                          "name": "Perpetual Access — Full Rights",
+                          "description": "Standard perpetual access with full online and download rights",
+                          "appliesTo": [
+                            "BOOKS",
+                            "ARTICLES"
+                          ],
+                          "status": "Active",
+                          "createdBy": "system",
+                          "updatedAt": "2026-04-30T09:00:00Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Rights Profile Templates"
+        ],
+        "summary": "Create a Rights Profile Template",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRightsTemplateRequest"
+              },
+              "examples": {
+                "perpetual-full-rights": {
+                  "summary": "Perpetual access with full usage rights",
+                  "description": "perpetual-full-rights",
+                  "value": {
+                    "templateCode": "RPT-PERP-001",
+                    "name": "Perpetual Access — Full Rights",
+                    "description": "Standard perpetual access with full online and download rights",
+                    "appliesTo": [
+                      "BOOKS",
+                      "ARTICLES"
+                    ],
+                    "status": "Draft",
+                    "rightsConfig": {
+                      "access": {
+                        "accessType": {
+                          "value": "PERPETUAL",
+                          "editable": false
+                        }
+                      },
+                      "timeWindow": {
+                        "gracePeriod": {
+                          "value": "NA",
+                          "editable": false
+                        }
+                      },
+                      "usageRights": {
+                        "onlineAccess": {
+                          "value": "ALLOWED",
+                          "editable": false
+                        },
+                        "download": {
+                          "value": "ALLOWED",
+                          "editable": false
+                        },
+                        "print": {
+                          "value": "ALLOWED",
+                          "editable": true
+                        },
+                        "copyPaste": {
+                          "value": "ALLOWED",
+                          "editable": true
+                        },
+                        "saveOffline": {
+                          "value": "ALLOWED",
+                          "editable": false
+                        },
+                        "share": {
+                          "value": "ALLOWED",
+                          "editable": true
+                        }
+                      },
+                      "concurrency": {
+                        "concurrencyMode": {
+                          "value": "NOT_APPLICABLE",
+                          "editable": false
+                        }
+                      },
+                      "apiFeed": {
+                        "apiFeed": {
+                          "value": "OFF",
+                          "editable": false
+                        }
+                      },
+                      "aiRights": {
+                        "aiRights": {
+                          "value": "OFF",
+                          "editable": false
+                        }
+                      },
+                      "nonAiRights": {
+                        "nonAiRights": {
+                          "value": "OFF",
+                          "editable": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "validation-error": {
+                    "description": "validation-error",
+                    "value": {
+                      "status": 400,
+                      "code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "timestamp": "2026-04-30T09:00:00Z",
+                      "fieldErrors": {
+                        "name": "must not be blank",
+                        "appliesTo": "must not be empty"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Template code or name already exists",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Template created",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "template-created": {
+                    "description": "template-created",
+                    "value": {
+                      "templateId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "templateCode": "RPT-PERP-001",
+                      "name": "Perpetual Access — Full Rights",
+                      "description": "Standard perpetual access with full online and download rights",
+                      "appliesTo": [
+                        "BOOKS",
+                        "ARTICLES"
+                      ],
+                      "rightsConfig": {
+                        "access": {
+                          "accessType": {
+                            "value": "PERPETUAL",
+                            "editable": false
+                          }
+                        },
+                        "timeWindow": {
+                          "gracePeriod": {
+                            "value": "NA",
+                            "editable": false
+                          }
+                        },
+                        "usageRights": {
+                          "onlineAccess": {
+                            "value": "ALLOWED",
+                            "editable": false
+                          },
+                          "download": {
+                            "value": "ALLOWED",
+                            "editable": false
+                          },
+                          "print": {
+                            "value": "ALLOWED",
+                            "editable": true
+                          },
+                          "copyPaste": {
+                            "value": "ALLOWED",
+                            "editable": true
+                          },
+                          "saveOffline": {
+                            "value": "ALLOWED",
+                            "editable": false
+                          },
+                          "share": {
+                            "value": "ALLOWED",
+                            "editable": true
+                          }
+                        },
+                        "concurrency": {
+                          "concurrencyMode": {
+                            "value": "NOT_APPLICABLE",
+                            "editable": false
+                          }
+                        },
+                        "apiFeed": {
+                          "apiFeed": {
+                            "value": "OFF",
+                            "editable": false
+                          }
+                        },
+                        "aiRights": {
+                          "aiRights": {
+                            "value": "OFF",
+                            "editable": false
+                          }
+                        },
+                        "nonAiRights": {
+                          "nonAiRights": {
+                            "value": "OFF",
+                            "editable": false
+                          }
+                        }
+                      },
+                      "status": "Active",
+                      "version": 1,
+                      "schemaVersion": 1,
+                      "createdAt": "2026-04-30T09:00:00Z",
+                      "updatedAt": "2026-04-30T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offerings": {
+      "get": {
+        "tags": [
+          "Product Offerings"
+        ],
+        "summary": "List Product Offerings",
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Paginated list of offerings",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "offering-list": {
+                    "description": "offering-list",
+                    "value": {
+                      "data": [
+                        {
+                          "offeringId": "f1e2d3c4-b5a6-7890-abcd-ef1234567890",
+                          "offeringCode": "BOO_C_2026",
+                          "name": "Book & Article Perpetual Access Offering",
+                          "offeringType": "PERPETUAL",
+                          "status": "ACTIVE",
+                          "publishedAt": "2026-04-30T11:00:00Z"
+                        }
+                      ],
+                      "page": 1,
+                      "pageSize": 500,
+                      "totalCount": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product Offerings"
+        ],
+        "summary": "Create a Product Offering",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOfferingRequest"
+              },
+              "examples": {
+                "perpetual-offering": {
+                  "summary": "Book & article perpetual access offering",
+                  "description": "perpetual-offering",
+                  "value": {
+                    "name": "Book & Article Perpetual Access Offering",
+                    "offeringType": "PERPETUAL",
+                    "dealType": "READ",
+                    "templateId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "contentValidationIds": [
+                      "17625df7-ecc9-4c0b-92bc-b569cb997d14",
+                      "3a1c8e2d-f7b4-4c9a-b012-e56789012345"
+                    ],
+                    "rightsConfig": {
+                      "access": {
+                        "accessType": {
+                          "value": "PERPETUAL"
+                        }
+                      },
+                      "usageRights": {
+                        "onlineAccess": {
+                          "value": "ALLOWED"
+                        },
+                        "download": {
+                          "value": "ALLOWED"
+                        },
+                        "print": {
+                          "value": "NOT_ALLOWED"
+                        },
+                        "copyPaste": {
+                          "value": "ALLOWED"
+                        },
+                        "saveOffline": {
+                          "value": "ALLOWED"
+                        },
+                        "share": {
+                          "value": "ALLOWED"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Offering name already in use",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Content validation expired, not successful, or rights config invalid",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Offering created",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "offering-created": {
+                    "description": "offering-created",
+                    "value": {
+                      "offeringId": "f1e2d3c4-b5a6-7890-abcd-ef1234567890",
+                      "offeringCode": "BOO_C_2026",
+                      "name": "Book & Article Perpetual Access Offering",
+                      "dealType": "READ",
+                      "offeringType": "PERPETUAL",
+                      "status": "ACTIVE",
+                      "productSlices": [
+                        {
+                          "sliceId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                          "itemCount": 950
+                        },
+                        {
+                          "sliceId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                          "itemCount": 550
+                        }
+                      ],
+                      "publishedAt": "2026-04-30T11:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rights-profile/templates/{id}/status": {
+      "patch": {
+        "tags": [
+          "Rights Profile Templates"
+        ],
+        "summary": "Transition a Rights Profile Template status",
+        "operationId": "transitionStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransitionStatusRequest"
+              },
+              "examples": {
+                "transition-status": {
+                  "summary": "Activate a draft template",
+                  "description": "transition-status",
+                  "value": {
+                    "status": "Active"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Invalid transition, same status, or version conflict",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "same-status": {
+                    "description": "same-status",
+                    "value": {
+                      "status": 409,
+                      "code": "TEMPLATE_SAME_STATUS_TRANSITION",
+                      "message": "Template is already in Active status",
+                      "timestamp": "2026-04-30T09:00:00Z"
+                    }
+                  },
+                  "version-conflict": {
+                    "description": "version-conflict",
+                    "value": {
+                      "status": 409,
+                      "code": "TEMPLATE_VERSION_CONFLICT",
+                      "message": "Version conflict on template 3fa85f64-5717-4562-b3fc-2c963f66afa6 — reload and retry",
+                      "timestamp": "2026-04-30T09:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Status transitioned",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "template-transitioned": {
+                    "description": "template-transitioned",
+                    "value": {
+                      "message": "Template 3fa85f64-5717-4562-b3fc-2c963f66afa6 status updated from Draft to Active"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rights-profile/templates/{id}/render/{mode}": {
+      "get": {
+        "tags": [
+          "Rights Profile Templates"
+        ],
+        "summary": "Render a Rights Profile Template — schema merged with stored values",
+        "description": "Mode SALES: each field's editable reflects the governance flag stored in the template (editable=true means an offering may override that field). Mode ADMIN: all fields editable=true regardless of stored flag.",
+        "operationId": "render",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SALES",
+                "ADMIN"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid mode — must be SALES or ADMIN",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Template not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Merged render payload",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "render-sales": {
+                    "description": "render-sales",
+                    "value": {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "code": "RPT-PERP-001",
+                      "name": "Perpetual Access — Full Rights",
+                      "description": "Standard perpetual access with full online and download rights",
+                      "appliesTo": [
+                        "BOOKS",
+                        "ARTICLES"
+                      ],
+                      "version": 1,
+                      "schemaVersion": 1,
+                      "sections": [
+                        {
+                          "code": "access",
+                          "label": "Access Type",
+                          "description": "Defines the primary access type",
+                          "displayOrder": 1,
+                          "fields": [
+                            {
+                              "code": "accessType",
+                              "label": "Access Model",
+                              "type": "SELECT",
+                              "variant": "CARD",
+                              "displayOrder": 1,
+                              "description": "Drives timing rules",
+                              "disclaimer": "Term dates to be captured in OMS",
+                              "currentValue": "PERPETUAL",
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "PERPETUAL",
+                                  "label": "Perpetual Access",
+                                  "subLabel": "No end date",
+                                  "icon": "Infinity"
+                                },
+                                {
+                                  "value": "TERM",
+                                  "label": "Term Access",
+                                  "subLabel": "Time-limited",
+                                  "icon": "CalendarDays",
+                                  "subFields": [
+                                    {
+                                      "code": "postCancellationAccess",
+                                      "label": "Post Cancellation Access",
+                                      "type": "SELECT",
+                                      "variant": "INLINE",
+                                      "displayOrder": 1,
+                                      "currentValue": null,
+                                      "editable": false,
+                                      "options": [
+                                        {
+                                          "value": "YES",
+                                          "label": "Yes"
+                                        },
+                                        {
+                                          "value": "NO",
+                                          "label": "No"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "code": "timeWindow",
+                          "label": "Time Window",
+                          "description": "Configure time-based access constraints after subscription ends",
+                          "displayOrder": 2,
+                          "fields": [
+                            {
+                              "code": "gracePeriod",
+                              "label": "Grace Period",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 1,
+                              "description": "Additional time allowed after subscription ends before access is revoked",
+                              "currentValue": "ALLOWED",
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "NOT_ALLOWED",
+                                  "label": "Not Allowed"
+                                },
+                                {
+                                  "value": "ALLOWED",
+                                  "label": "Allowed",
+                                  "params": [
+                                    {
+                                      "key": "unit",
+                                      "label": "Select Type",
+                                      "type": "SELECT",
+                                      "options": [
+                                        "Days",
+                                        "Weeks",
+                                        "Months"
+                                      ]
+                                    },
+                                    {
+                                      "key": "value",
+                                      "label": "Duration",
+                                      "type": "NUMBER"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "code": "usageRights",
+                          "label": "Usage Rights",
+                          "description": "Configure allowed usage and restrictions",
+                          "hint": "Choose Allowed or Not-Allowed for each right.",
+                          "displayOrder": 3,
+                          "fields": [
+                            {
+                              "code": "onlineAccess",
+                              "label": "Online Access",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 1,
+                              "description": "Read content in a browser",
+                              "currentValue": "ALLOWED",
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "NOT_ALLOWED",
+                                  "label": "Not Allowed"
+                                },
+                                {
+                                  "value": "ALLOWED",
+                                  "label": "Allowed"
+                                }
+                              ]
+                            },
+                            {
+                              "code": "print",
+                              "label": "Print",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 3,
+                              "description": "Print physical copies",
+                              "currentValue": "ALLOWED",
+                              "editable": true,
+                              "options": [
+                                {
+                                  "value": "NOT_ALLOWED",
+                                  "label": "Not Allowed"
+                                },
+                                {
+                                  "value": "ALLOWED",
+                                  "label": "Allowed"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "code": "concurrency",
+                          "label": "Concurrency",
+                          "description": "Define simultaneous user/session limits",
+                          "displayOrder": 4,
+                          "fields": [
+                            {
+                              "code": "concurrencyMode",
+                              "label": "Concurrency Mode",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 1,
+                              "disclaimer": "Limit to be captured in OMS (Concurrency will be applied only to DRM Content)",
+                              "currentValue": null,
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "NOT_APPLICABLE",
+                                  "label": "Not Applicable"
+                                },
+                                {
+                                  "value": "APPLICABLE_WITH_LIMIT",
+                                  "label": "Applicable with Limit"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "code": "apiFeed",
+                          "label": "API Feed",
+                          "description": "Configure API-based content delivery rights",
+                          "displayOrder": 5,
+                          "fields": [
+                            {
+                              "code": "apiFeed",
+                              "label": "API Feed",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 1,
+                              "currentValue": null,
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "ON",
+                                  "label": "On"
+                                },
+                                {
+                                  "value": "OFF",
+                                  "label": "Off"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "code": "aiRights",
+                          "label": "AI Rights",
+                          "description": "Configure reuse rights for AI purposes",
+                          "displayOrder": 6,
+                          "fields": [
+                            {
+                              "code": "aiRights",
+                              "label": "AI Rights",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 1,
+                              "currentValue": null,
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "ON",
+                                  "label": "On"
+                                },
+                                {
+                                  "value": "OFF",
+                                  "label": "Off"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "code": "nonAiRights",
+                          "label": "Non-AI Rights",
+                          "description": "Configure reuse rights for non-AI purposes",
+                          "displayOrder": 7,
+                          "fields": [
+                            {
+                              "code": "nonAiRights",
+                              "label": "Non-AI Rights",
+                              "type": "SELECT",
+                              "variant": "INLINE",
+                              "displayOrder": 1,
+                              "currentValue": null,
+                              "editable": false,
+                              "options": [
+                                {
+                                  "value": "ON",
+                                  "label": "On"
+                                },
+                                {
+                                  "value": "OFF",
+                                  "label": "Off"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offerings/{offeringCode}": {
+      "get": {
+        "tags": [
+          "Product Offerings"
+        ],
+        "summary": "Get a Product Offering by code",
+        "description": "Returns full offering detail with paginated slices. Each slice exposes: sliceId, sliceCategory, includedFormats, templateId, isDynamic, sliceName. rules and rightsConfig are not included in the response.",
+        "operationId": "getByCode",
+        "parameters": [
+          {
+            "name": "offeringCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Offering not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Full offering detail with paginated slices; each slice includes isDynamic, sliceName, sliceCategory, includedFormats, templateId",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "offering-detail": {
+                    "description": "offering-detail",
+                    "value": {
+                      "offeringId": "f1e2d3c4-b5a6-7890-abcd-ef1234567890",
+                      "offeringCode": "BOO_C_2026",
+                      "name": "Book & Article Perpetual Access Offering",
+                      "dealType": "READ",
+                      "offeringType": "PERPETUAL",
+                      "status": "ACTIVE",
+                      "productSlices": {
+                        "totalCount": 2,
+                        "page": 1,
+                        "pageSize": 500,
+                        "data": [
+                          {
+                            "sliceId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                            "sliceCategory": "CONTENT_LIST",
+                            "includedFormats": [
+                              "ONLINE",
+                              "PDF"
+                            ],
+                            "templateId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "isDynamic": false,
+                            "sliceName": null
+                          },
+                          {
+                            "sliceId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                            "sliceCategory": "CONTENT_LIST",
+                            "includedFormats": [
+                              "ONLINE",
+                              "PDF",
+                              "EPUB"
+                            ],
+                            "templateId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "isDynamic": true,
+                            "sliceName": "British Journal Subscription 2026"
+                          }
+                        ]
+                      },
+                      "publishedAt": "2026-04-30T11:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Product Offerings"
+        ],
+        "summary": "Retire a Product Offering",
+        "operationId": "retire",
+        "parameters": [
+          {
+            "name": "offeringCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Offering is already retired",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Offering not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Offering retired"
+          }
+        }
+      }
+    },
+    "/api/v1/offerings/{offeringCode}/slices/{sliceId}/contents": {
+      "get": {
+        "tags": [
+          "Product Offerings"
+        ],
+        "summary": "Get contents of a specific slice",
+        "operationId": "getSliceContents",
+        "parameters": [
+          {
+            "name": "offeringCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sliceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Offering or slice not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Paginated content item list for the slice",
+            "content": {
+              "*/*": {
+                "examples": {
+                  "slice-contents": {
+                    "description": "slice-contents",
+                    "value": {
+                      "sliceId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "totalCount": 1500,
+                      "page": 2,
+                      "pageSize": 500,
+                      "data": [
+                        {
+                          "contentId": "fad71fc6-9431-497b-b9b1-7bb96135ef46",
+                          "contentType": "ScholarlyArticle"
+                        },
+                        {
+                          "contentId": "a3c812de-1f4b-4e2a-9c07-2b5d6e8f1a09",
+                          "contentType": "Book"
+                        }
+                      ],
+                      "_links": {
+                        "prev": {
+                          "href": "/api/v1/offerings/BOO_C_2026/slices/a1b2c3d4-e5f6-7890-abcd-ef1234567890/contents?page=1&pageSize=500"
+                        },
+                        "next": {
+                          "href": "/api/v1/offerings/BOO_C_2026/slices/a1b2c3d4-e5f6-7890-abcd-ef1234567890/contents?page=3&pageSize=500"
+                        },
+                        "last": {
+                          "href": "/api/v1/offerings/BOO_C_2026/slices/a1b2c3d4-e5f6-7890-abcd-ef1234567890/contents?page=3&pageSize=500"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fieldErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Field-level validation errors — present only on HTTP 400",
+            "example": {
+              "name": "must not be blank",
+              "templateId": "must not be null"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Additional context to help the caller self-correct (e.g. relevant resource IDs)",
+            "example": {
+              "contentValidationId": "17625df7-ecc9-4c0b-92bc-b569cb997d14"
+            }
+          }
+        }
+      },
+      "UpdateRightsTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "appliesTo": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ALL",
+                "ARTICLES",
+                "BOOKS",
+                "JOURNALS"
+              ]
+            },
+            "minItems": 1
+          },
+          "rightsConfig": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "appliesTo",
+          "name",
+          "rightsConfig"
+        ]
+      },
+      "CreateRightsTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "templateCode": {
+            "type": "string",
+            "pattern": "RPT-[A-Z0-9-]+"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "appliesTo": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ALL",
+                "ARTICLES",
+                "BOOKS",
+                "JOURNALS"
+              ]
+            },
+            "minItems": 1
+          },
+          "rightsConfig": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Active",
+              "Inactive"
+            ]
+          }
+        },
+        "required": [
+          "appliesTo",
+          "name",
+          "rightsConfig",
+          "status"
+        ]
+      },
+      "CreateOfferingRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "offeringType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dealType": {
+            "type": "string",
+            "enum": [
+              "READ",
+              "PUBLISH",
+              "READ_AND_PUBLISH"
+            ]
+          },
+          "templateId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contentValidationIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1
+          },
+          "rightsConfig": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "contentValidationIds",
+          "name",
+          "offeringType",
+          "rightsConfig",
+          "templateId"
+        ]
+      },
+      "TransitionStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Active",
+              "Inactive"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
